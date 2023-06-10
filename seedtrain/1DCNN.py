@@ -49,18 +49,18 @@ class simam_module(torch.nn.Module):
 
         return x * self.activaton(y)
 
-df = pd.read_csv("Cdataset/train.csv", header=None)
+df = pd.read_csv("./jiafengyou-train.csv", header=None)
 train_targets = df.values[:,224]  #? 这里修改为224
-train_data = df.values[0:400,19:201]  # 扫描的数据中的行 列
+train_data = df.values[0:800,19:201]  # 扫描的数据中的行 列
 #print(train_targets)
-df2 = pd.read_csv("Cdataset/val.csv", header=None)
+df2 = pd.read_csv("./jiafengyou-val.csv", header=None)
 test_targets = df2.values[:,224]  #? 这里修改为224
-test_data = df2.values[0:100,19:201]
+test_data = df2.values[0:200,19:201]
 #print(df2.head(5))
 
-df3 = pd.read_csv("Cdataset/test.csv", header=None)
+df3 = pd.read_csv("./jiafengyou-test.csv", header=None)
 pre_targets = df3.values[:,224]  #? 这里修改为224
-pre_data = df3.values[0:100,19:201]  
+pre_data = df3.values[0:200,19:201]  
 
 
 train_data_size = len(train_data)
