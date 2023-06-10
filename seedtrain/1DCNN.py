@@ -71,8 +71,11 @@ print("训练数据集长度为：{}".format(train_data_size))#"训练数据集�
 print("验证数据集长度为：{}".format(test_data_size))
 print("测试预测集长度为：{}".format(pre_data_size))
 
+train_data = train_data[:, :90]
 train_data = train_data.reshape([-1,1,90])
+test_data = test_data[:, :90]
 test_data = test_data.reshape([-1,1,90])
+pre_data = pre_data[:, :90]
 pre_data = pre_data.reshape([-1,1,90])
 
 train_data =torch.tensor(train_data,dtype=torch.float32)
