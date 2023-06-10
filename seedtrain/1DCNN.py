@@ -49,16 +49,16 @@ class simam_module(torch.nn.Module):
 
         return x * self.activaton(y)
 
-df = pd.read_csv("D:\\S\\start\\code\\CodeTest\\seedtrain\\jiafengyou-train.csv", encoding='ASCII', header=None)
+df = pd.read_excel("D:\S\start\code\CodeTest\seedtrain\jiafengyou-train.xlsx",  header=None)
 train_targets = df.values[:,224]  #? 这里修改为224
 train_data = df.values[0:800,19:201]  # 扫描的数据中的行 列
 #print(train_targets)
-df2 = pd.read_csv("D:\\S\\start\\code\\CodeTest\\seedtrain\\jiafengyou-test.csv", encoding='UTF-8', header=None)
+df2 = pd.read_excel("D:\\S\\start\\code\\CodeTest\\seedtrain\\jiafengyou-test.xlsx",  header=None)
 test_targets = df2.values[:,224]  #? 这里修改为224
 test_data = df2.values[0:200,19:201]
 #print(df2.head(5))
 
-df3 = pd.read_csv("D:\\S\start\\code\\CodeTest\\seedtrain\\jiafengyou-val.csv", encoding='UTF-8', header=None)
+df3 = pd.read_excel("D:\\S\start\\code\\CodeTest\\seedtrain\\jiafengyou-val.xlsx", header=None)
 pre_targets = df3.values[:,224]  #? 这里修改为224
 pre_data = df3.values[0:200,19:201]  
 
@@ -74,8 +74,6 @@ print("测试预测集长度为：{}".format(pre_data_size))
 train_data = train_data.reshape([-1,1,90])
 test_data = test_data.reshape([-1,1,90])
 pre_data = pre_data.reshape([-1,1,90])
-
-
 
 train_data =torch.tensor(train_data,dtype=torch.float32)
 train_targets = torch.tensor(train_targets)
