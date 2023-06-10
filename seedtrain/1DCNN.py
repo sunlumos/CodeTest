@@ -124,23 +124,23 @@ class CNN(nn.Module):
         )
 
 # ! 如果过拟合  删除一层或者两层
-        self.layer4 = nn.Sequential(
-            nn.Conv1d(32,64,2),
-            nn.BatchNorm1d(64),
-            nn.ReLU(),
+        # self.layer4 = nn.Sequential(
+        #     nn.Conv1d(32,64,2),
+        #     nn.BatchNorm1d(64),
+        #     nn.ReLU(),
 
-        )
+        # )
 
-        self.layer5 = nn.Sequential(
-            nn.Conv1d(64,128,2),
-            nn.MaxPool1d(2),
-            nn.BatchNorm1d(128),
-            nn.ReLU(),
+        # self.layer5 = nn.Sequential(
+        #     nn.Conv1d(64,128,2),
+        #     nn.MaxPool1d(2),
+        #     nn.BatchNorm1d(128),
+        #     nn.ReLU(),
 
-        )
+        # )
 
         self.fc1 = nn.Sequential(
-            nn.Linear(1152,512),
+            nn.Linear(672,512),
             nn.Dropout(0.4),
             nn.BatchNorm1d(512),
 
@@ -168,8 +168,8 @@ class CNN(nn.Module):
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
-        out = self.layer4(out)
-        out = self.layer5(out)
+        # out = self.layer4(out)
+        # out = self.layer5(out)
         out = out.view(out.size(0),-1)
         out = self.fc1(out)
       #  out = self.fc4(out)
@@ -273,7 +273,9 @@ for i in range(epoch):
     print("测试集的正确率:{}".format(pre_acc))
     total_test_step = total_test_step + 1
 
-    torch.save(zh.state_dict(),"baizhuo333_CNN_method_{}.pth".format(i+1))
+    # 只保留最后的模型
+    if i == epoch - 1:
+        torch.save(zh.state_dict(),"baizhuo333_CNN_method_{}.pth".format(i+1))
     end_time = time.time()
     print("Runtime:{}".format(end_time-start_time))
     # print("模型已保存")
