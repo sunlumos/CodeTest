@@ -50,18 +50,18 @@ class simam_module(torch.nn.Module):
         return x * self.activaton(y)
 
 # 打印控制台输出
-f = open('D:\S\start\code\CodeTest\seedtrain\log.txt','w')
+f = open('D:\S\start\code\CodeTest\seedtrain\jiafengyouData\jiafengyou-log.txt','w')
 
-df = pd.read_excel("D:\S\start\code\CodeTest\seedtrain\jiafengyou-train.xlsx",  header=None)
+df = pd.read_csv("D:\S\start\code\CodeTest\seedtrain\jiafengyouData\jiafengyou-train.csv",  header=None)
 train_targets = df.values[:,224]  #? 这里修改为224
 train_data = df.values[0:800,19:201]  # 扫描的数据中的行 列
 #print(train_targets)
-df2 = pd.read_excel("D:\\S\\start\\code\\CodeTest\\seedtrain\\jiafengyou-test.xlsx",  header=None)
+df2 = pd.read_csv("D:\S\start\code\CodeTest\seedtrain\jiafengyouData\jiafengyou-test.csv",  header=None)
 test_targets = df2.values[:,224]  #? 这里修改为224
 test_data = df2.values[0:200,19:201]
 #print(df2.head(5))
 
-df3 = pd.read_excel("D:\\S\start\\code\\CodeTest\\seedtrain\\jiafengyou-val.xlsx", header=None)
+df3 = pd.read_csv("D:\S\start\code\CodeTest\seedtrain\jiafengyouData\jiafengyou-val.csv", header=None)
 pre_targets = df3.values[:,224]  #? 这里修改为224
 pre_data = df3.values[0:200,19:201]  
 
@@ -107,20 +107,21 @@ class CNN(nn.Module):
         self.att = simam_module()
         self.layer1 = nn.Sequential(
             nn.Conv1d(in_channels=1,out_channels=8,kernel_size=2),
-            nn.MaxPool1d(2),
+            # nn.MaxPool1d(2),
             nn.BatchNorm1d(8),
             nn.ReLU(),
 
         )
         self.layer2 = nn.Sequential(
-            nn.Conv1d(8,16,2),
+            nn.Conv1d(8,16, kernel_size = 2),
+            nn.MaxPool1d(2),
             nn.BatchNorm1d(16),
             nn.ReLU(),
 
         )
         self.layer3 = nn.Sequential(
             nn.Conv1d(16,32,2),
-            nn.MaxPool1d(2),
+            # nn.MaxPool1d(2),
             nn.BatchNorm1d(32),
             nn.ReLU(),
 
@@ -143,7 +144,7 @@ class CNN(nn.Module):
         # )
 
         self.fc1 = nn.Sequential(
-            nn.Linear(672,512),
+            nn.Linear(1376,512),
             nn.Dropout(0.4),
             nn.BatchNorm1d(512),
 
@@ -156,11 +157,11 @@ class CNN(nn.Module):
             nn.Dropout(0.4),
             nn.BatchNorm1d(128),
 
-            nn.Linear(128, 32),
-            nn.Dropout(0.4),
-            nn.BatchNorm1d(32),
+            # nn.Linear(128, 32),
+            # nn.Dropout(0.4),
+            # nn.BatchNorm1d(32),
 
-            nn.Linear(32, 2),
+            nn.Linear(128, 2),
 
         )
 
