@@ -4,9 +4,9 @@ from sklearn import svm
 from sklearn.linear_model import LogisticRegression
 
 #加载数据
-df = pd.read_csv("E:\\pythonProject\\C51GAN\\randomnoise\\2000\\noiseval.csv", header=None)
-train_targets = df.values[:,112]
-train_data = df.values[0:1000,9:99]
+df = pd.read_csv("D:\S\start\code\CodeTest\seedtrain\yongyou1540Data\yongyou1540-train.csv", header=None)
+train_targets = df.values[:,224]
+train_data = df.values[0:800,19:201]
 #设置网格寻优的参数
 params = [{'kernel':['linear'], 'C':[1, 10, 100, 1000]},
     {'kernel':['poly'], 'C':[1], 'degree':[2, 3]},

@@ -27,7 +27,7 @@ print("测试数据集长度为：{}".format(pre_tensor_len))
 # svm.SVC(C=1,kernel='poly',degree=3,) 训练集： 0.94625 验证集： 0.86 测试集： 0.85
 # svm.SVC(C=1000,kernel='rbf',gamma=1,) 训练集： 0.9375 验证集： 0.83 测试集： 0.845
 # svm.SVC(C=1000,kernel='rbf',gamma=0.1,) 0.89625 0.79 0.76
-model = svm.SVC(C=2,kernel='linear',gamma=10,)
+model = svm.SVC(C=1,kernel='poly',degree=4,)
 model.fit(train_data,train_targets)
 
 train_score = model.score(train_data,train_targets)
