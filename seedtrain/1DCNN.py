@@ -49,16 +49,19 @@ class simam_module(torch.nn.Module):
 
         return x * self.activaton(y)
 
-df = pd.read_excel("D:\S\start\code\CodeTest\seedtrain\jiafengyou-train.xlsx",  header=None)
+# 打印控制台输出
+f = open('D:\S\start\code\CodeTest\seedtrain\jiafengyouData\jiafengyou-log.txt','w')
+
+df = pd.read_csv("D:\S\start\code\CodeTest\seedtrain\jiafengyouData\jiafengyou-train.csv",  header=None)
 train_targets = df.values[:,224]  #? 这里修改为224
 train_data = df.values[0:800,19:201]  # 扫描的数据中的行 列
 #print(train_targets)
-df2 = pd.read_excel("D:\\S\\start\\code\\CodeTest\\seedtrain\\jiafengyou-test.xlsx",  header=None)
+df2 = pd.read_csv("D:\S\start\code\CodeTest\seedtrain\jiafengyouData\jiafengyou-test.csv",  header=None)
 test_targets = df2.values[:,224]  #? 这里修改为224
 test_data = df2.values[0:200,19:201]
 #print(df2.head(5))
 
-df3 = pd.read_excel("D:\\S\start\\code\\CodeTest\\seedtrain\\jiafengyou-val.xlsx", header=None)
+df3 = pd.read_csv("D:\S\start\code\CodeTest\seedtrain\jiafengyouData\jiafengyou-val.csv", header=None)
 pre_targets = df3.values[:,224]  #? 这里修改为224
 pre_data = df3.values[0:200,19:201]  
 
@@ -92,8 +95,8 @@ test_set = TensorDataset(test_data,test_targets)
 pre_set = TensorDataset(pre_data,pre_targets)
 
 # ! 过拟合时修改size和学习率
-BATCH_SIZE = 20
-learning_rate = 0.0001
+BATCH_SIZE = 40
+learning_rate = 0.001
 DataLoader_train_data = DataLoader(dataset=train_set,batch_size=BATCH_SIZE,shuffle=True,)
 DataLoader_test_data = DataLoader(dataset=test_set,batch_size=BATCH_SIZE,shuffle=True,)
 DataLoader_pre_data = DataLoader(dataset=pre_set,batch_size=BATCH_SIZE,shuffle=True,)
@@ -104,43 +107,44 @@ class CNN(nn.Module):
         self.att = simam_module()
         self.layer1 = nn.Sequential(
             nn.Conv1d(in_channels=1,out_channels=8,kernel_size=2),
-            nn.MaxPool1d(2),
+            # nn.MaxPool1d(2),
             nn.BatchNorm1d(8),
             nn.ReLU(),
 
         )
         self.layer2 = nn.Sequential(
-            nn.Conv1d(8,16,2),
+            nn.Conv1d(8,16, kernel_size = 2),
+            nn.MaxPool1d(2),
             nn.BatchNorm1d(16),
             nn.ReLU(),
 
         )
         self.layer3 = nn.Sequential(
             nn.Conv1d(16,32,2),
-            nn.MaxPool1d(2),
+            # nn.MaxPool1d(2),
             nn.BatchNorm1d(32),
             nn.ReLU(),
 
         )
 
 # ! 如果过拟合  删除一层或者两层
-        self.layer4 = nn.Sequential(
-            nn.Conv1d(32,64,2),
-            nn.BatchNorm1d(64),
-            nn.ReLU(),
+        # self.layer4 = nn.Sequential(
+        #     nn.Conv1d(32,64,2),
+        #     nn.BatchNorm1d(64),
+        #     nn.ReLU(),
 
-        )
+        # )
 
-        self.layer5 = nn.Sequential(
-            nn.Conv1d(64,128,2),
-            nn.MaxPool1d(2),
-            nn.BatchNorm1d(128),
-            nn.ReLU(),
+        # self.layer5 = nn.Sequential(
+        #     nn.Conv1d(64,128,2),
+        #     nn.MaxPool1d(2),
+        #     nn.BatchNorm1d(128),
+        #     nn.ReLU(),
 
-        )
+        # )
 
         self.fc1 = nn.Sequential(
-            nn.Linear(1152,512),
+            nn.Linear(1376,512),
             nn.Dropout(0.4),
             nn.BatchNorm1d(512),
 
@@ -153,11 +157,11 @@ class CNN(nn.Module):
             nn.Dropout(0.4),
             nn.BatchNorm1d(128),
 
-            nn.Linear(128, 32),
-            nn.Dropout(0.4),
-            nn.BatchNorm1d(32),
+            # nn.Linear(128, 32),
+            # nn.Dropout(0.4),
+            # nn.BatchNorm1d(32),
 
-            nn.Linear(32, 2),
+            nn.Linear(128, 2),
 
         )
 
@@ -168,8 +172,8 @@ class CNN(nn.Module):
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
-        out = self.layer4(out)
-        out = self.layer5(out)
+        # out = self.layer4(out)
+        # out = self.layer5(out)
         out = out.view(out.size(0),-1)
         out = self.fc1(out)
       #  out = self.fc4(out)
@@ -197,14 +201,16 @@ total_train_step = 0
 total_test_step = 0
 # 设置训练的轮数
 # ! 过拟合时修改训练轮数
-epoch = 2000
+epoch = 1000
 
 start_time = time.time()
+best_acc = 0
+best_acc_epo = 0
 
 for i in range(epoch):
     total_train_loss = 0
     total_train_acc = 0
-    print("-------第{}轮训练开始-------".format(i+1))
+    print("-------第{}轮训练开始-------".format(i+1),file=f)
     #训练步骤开始
     zh.train()
     for data in DataLoader_train_data:
@@ -228,8 +234,8 @@ for i in range(epoch):
            # end_time = time.time()
             #print("Runtime:{}".format(end_time-start_time))
        # print("训练次数：{}，Loss：{}".format(total_train_step,loss))
-    print("训练集的Loss:{}".format(total_train_loss))
-    print("训练集的正确率：{}".format(total_train_acc/train_data_size))
+    print("训练集的Loss:{}".format(total_train_loss),file=f)
+    print("训练集的正确率：{}".format(total_train_acc/train_data_size),file=f)
 
     zh.eval()
     #测试步骤开始
@@ -249,14 +255,13 @@ for i in range(epoch):
             accuracy = (outputs.argmax(1) == targets).sum()#详情见tips_1.py
             total_acc = total_acc + accuracy
             test_acc = total_acc/test_data_size
-    print("验证集的Loss:{}".format(total_test_loss))
-    print("验证集的正确率:{}".format(test_acc))
+    print("验证集的Loss:{}".format(total_test_loss),file=f)
+    print("验证集的正确率:{}".format(test_acc),file=f)
     total_test_step = total_test_step + 1
 
     total_pre_loss = 0
     total_acc1 = 0
-    # best_acc = 0
-    # best_acc_epo = 0
+
     with torch.no_grad():
         for data in DataLoader_pre_data:
             imgs, targets = data
@@ -269,17 +274,20 @@ for i in range(epoch):
             accuracy = (outputs.argmax(1) == targets).sum()  # 详情见tips_1.py
             total_acc1 = total_acc1 + accuracy
             pre_acc = total_acc1 / pre_data_size
-    print("测试集的Loss:{}".format(total_pre_loss))
-    print("测试集的正确率:{}".format(pre_acc))
+    print("测试集的Loss:{}".format(total_pre_loss),file=f)
+    print("测试集的正确率:{}".format(pre_acc),file=f)
     total_test_step = total_test_step + 1
 
+    # 保留每一轮的模型
     torch.save(zh.state_dict(),"baizhuo333_CNN_method_{}.pth".format(i+1))
     end_time = time.time()
-    print("Runtime:{}".format(end_time-start_time))
+    print("Runtime:{}".format(end_time-start_time))    
     # print("模型已保存")
-    # if test_acc >= best_acc:
-    #     best_acc = test_acc
-    #     best_acc_epo = i
-# print("最优正确率为：{}".format(best_acc))
-# print("最优正确率所在的轮数为：{}".format(best_acc_epo+1))
+    if test_acc >= best_acc:
+        best_acc = test_acc
+        best_acc_epo = i
+f.close()
+    
+print("最优正确率为：{}".format(best_acc))
+print("最优正确率所在的轮数为：{}".format(best_acc_epo+1))
 
