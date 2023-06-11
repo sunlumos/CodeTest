@@ -23,7 +23,8 @@ print("训练数据集长度为：{}".format(train_tensor_len))#"训练数据集
 print("验证数据集长度为：{}".format(test_tensor_len))
 print("测试数据集长度为：{}".format(pre_tensor_len))
 
-model=svm.SVC(C=2,kernel='linear',gamma=10,)
+# model=svm.SVC(C=2,kernel='linear',gamma=10,)
+model = svm.SVC(C=1000,kernel='rbf',gamma=0.1,)
 model.fit(train_data,train_targets)
 
 train_score = model.score(train_data,train_targets)
