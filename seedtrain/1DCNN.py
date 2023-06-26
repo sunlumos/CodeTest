@@ -97,6 +97,7 @@ pre_set = TensorDataset(pre_data,pre_targets)
 # ! 过拟合时修改size和学习率
 BATCH_SIZE = 40
 learning_rate = 0.001
+# 数据集  训练量  是否打乱   num_workers，它表示用于数据加载的子进程数量
 DataLoader_train_data = DataLoader(dataset=train_set,batch_size=BATCH_SIZE,shuffle=True,)
 DataLoader_test_data = DataLoader(dataset=test_set,batch_size=BATCH_SIZE,shuffle=True,)
 DataLoader_pre_data = DataLoader(dataset=pre_set,batch_size=BATCH_SIZE,shuffle=True,)

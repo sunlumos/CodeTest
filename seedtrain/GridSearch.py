@@ -4,7 +4,7 @@ from sklearn import svm
 from sklearn.linear_model import LogisticRegression
 
 #加载数据
-df = pd.read_csv("D:\S\start\code\CodeTest\seedtrain\yongyou1540Data\yongyou1540-train.csv", header=None)
+df = pd.read_csv("D:\S\start\code\CodeTest\seedtrain\jiafengyouData\jiafengyou-test.csv", header=None)
 train_targets = df.values[:,224]
 train_data = df.values[0:800,19:201]
 #设置网格寻优的参数

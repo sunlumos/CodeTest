@@ -4,15 +4,15 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
 
-df = pd.read_csv("D:\S\start\code\CodeTest\seedtrain\yongyou1540Data\yongyou1540-train.csv", header=None)
+df = pd.read_excel("D:\S\start\code\jiafengyou-train.xlsx", header=None)
 train_targets = df.values[:,224]
 train_data = df.values[0:800,19:201]
 #print(train_targets)
-df2 = pd.read_csv("D:\S\start\code\CodeTest\seedtrain\yongyou1540Data\yongyou1540-test.csv", header=None)
+df2 = pd.read_excel("D:\S\start\code\jiafengyou2-test.xlsx", header=None)
 test_targets = df2.values[:,224]
 test_data = df2.values[0:800,19:201]
 #print(df2.head(5))
-df3 = pd.read_csv("D:\S\start\code\CodeTest\seedtrain\yongyou1540Data\yongyou1540-val.csv", header=None)
+df3 = pd.read_excel("D:\S\start\code\jiafengyou-val.xlsx", header=None)
 pre_targets = df3.values[:,224]
 pre_data = df3.values[0:800,19:201]
 
