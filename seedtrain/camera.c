@@ -28,6 +28,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	wprintf(L"Device count: %d\n", nDeviceCount);
 	// Iterate through each devices to print their name and description
+    // 遍历每个设备以打印其名称和说明
 	for (int n = 0; n < nDeviceCount; n++)
 	{
 		SI_CHK(SI_GetEnumStringByIndex(SI_SYSTEM, L"DeviceName", n, szDeviceName,
@@ -66,7 +67,7 @@ SI_H g_hDevice = 0;
 int SI_IMPEXP_CONV onDataCallback(SI_U8* _pBuffer, SI_64 _nFrameSize, SI_64 _nFrameNumber, void* _pContext);  //这行其实可以注释掉
 
 
-
+// 遍历系统中的设备，让用户选择一个设备，并返回所选设备的索引
 int SelectDevice(void)
 {
 	int nError = siNoError;  // siNoError=0
@@ -78,6 +79,7 @@ int SelectDevice(void)
 	// Iterate through each devices to print their name
 	for (int n = 0; n < nDeviceCount; n++)
 	{
+
 		SI_CHK(SI_GetEnumStringByIndex(SI_SYSTEM, L"DeviceName", n, szDeviceName,4096));//SI_GetEnumStringByIndex:根据指定特性的字符串设置当前使用的索引
 		wprintf(L"\t%d: %s\n", n, szDeviceName);
 	}
@@ -127,10 +129,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	int nDeviceIndex = -1;
 	int nAction = 0;
 	wchar_t szMessage[] = L"Select an action:\n\t0: exit\n\t1: startacquisition\n\t2: stop acquisition\n";
-		// Load SpecSensor and get the device count
+		// Load SpecSensor and get the device count  加载必要内容
 	wprintf(L"Loading SpecSensor...\n");
 	SI_CHK(SI_Load(LICENSE_PATH));// the first code
-	// Select a device
+	// Select a device选择设备 
 	nDeviceIndex = SelectDevice();
 
 	// Open the device and set the callbacks
@@ -140,7 +142,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	SI_CHK(SI_RegisterFeatureCallback(g_hDevice, L"Camera.ExposureTime",FeatureCallback1, 0));
 	SI_CHK(SI_RegisterFeatureCallback(g_hDevice, L"Camera.ExposureTime",FeatureCallback2, 0));
 	SI_CHK(SI_RegisterDataCallback(g_hDevice, onDataCallback, 0));
-	// Prompt commands
+	// Prompt commands  命令提示符
 	wprintf(L"%s", szMessage);
 	while (scanf("%d", &nAction))
 	{
