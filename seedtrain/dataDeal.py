@@ -1,5 +1,7 @@
 import pandas as pd
 
+# ! 用于读取表格后进行三分类
+
 # 读取 Excel 文件
 input_file = 'D:\S\start\code\CodeTest\\test.xlsx'
 output_file = 'D:\S\start\code\CodeTest\\result.xlsx'
