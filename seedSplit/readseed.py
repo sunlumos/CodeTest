@@ -1,18 +1,31 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
+import numpy as np
+from sklearn.utils import shuffle
 
-# 从 Excel 文件中读取数据
-df = pd.read_excel('jiafengyou2_laohua96h.xlsx', header=None)
+def split_dataset(filename):
+    # 读取xlsx文件
+    data = pd.read_excel(filename, header=None)
 
-# 划分训练集、验证集和测试集
-train_df, remaining_df = train_test_split(df, test_size=200, random_state=42)
-val_df, test_df = train_test_split(remaining_df, test_size=100, random_state=42)
+    # 随机打乱数据
+    data = shuffle(data)
 
-# 写出训练集到新的 Excel 文件
-train_df.to_excel('train_set.xlsx', header=None, index=None)
+    # 计算数据集的大小
+    total_samples = len(data)
+    train_samples = int(0.8 * total_samples)
+    test_samples = int(0.1 * total_samples)
 
-# 写出验证集到新的 Excel 文件
-val_df.to_excel('val_set.xlsx', header=None, index=None)
+    # 分割数据集
+    train_data = data[:train_samples].reset_index(drop=True,)
+    test_data = data[train_samples:train_samples+test_samples].reset_index(drop=True)
+    validation_data = data[train_samples+test_samples:].reset_index(drop=True)
 
-# 写出测试集到新的 Excel 文件
-test_df.to_excel('test_set.xlsx', header=None, index=None)
+    # 提取输入文件名（去除路径和扩展名）
+    input_filename = filename.split('\\')[-1].split('.')[0]
+
+    # 保存为CSV文件
+    train_data.to_csv(f'D:\\S\\start\\code\\CodeTest\\seedSplit\\{input_filename}_train_data.csv', index=False, header=False)
+    test_data.to_csv(f'D:\\S\\start\\code\\CodeTest\\seedSplit\\{input_filename}_test_data.csv', index=False, header=False)
+    validation_data.to_csv(f'D:\\S\\start\\code\\CodeTest\\seedSplit\\{input_filename}_val_data.csv', index=False, header=False)
+
+# 示例调用
+split_dataset('D:\S\start\code\CodeTest\seedSplit\\all\jiafengyou2_weilaohua.xlsx')

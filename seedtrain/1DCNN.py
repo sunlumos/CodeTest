@@ -10,7 +10,10 @@ import time
 
 # ? 修改位置
 
+# 当我们在每次运行代码时设置相同的随机种子，保证了模型的初始化和训练过程中的随机操作都是相同的，从而确保了每次运行的结果是一致的。这样有助于我们更好地调试代码，对比不同模型或算法的表现，并确保实验的可重现性。否则，如果不设置随机种子，每次运行时随机数的生成都是不同的，导致结果的差异，使得实验不可复现，也难以追踪问题
+# 种子数的选择并没有固定的标准，而是需要根据实验的需求和目标来灵活确定。重要的是，在进行实验时，始终保持相同的种子数，以确保实验的可重现性和稳定性
 def seed_torch(seed=1029):
+    # 设置Python内置random模块的随机种子 这用于在使用random模块的Python函数中进行随机数生成
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
@@ -26,7 +29,7 @@ seed_torch()
 class simam_module(torch.nn.Module):
     def __init__(self, channels=None, e_lambda=1e-4):
         super(simam_module, self).__init__()
-
+ 
         self.activaton = nn.Sigmoid()
         self.e_lambda = e_lambda
 
@@ -97,6 +100,7 @@ pre_set = TensorDataset(pre_data,pre_targets)
 # ! 过拟合时修改size和学习率
 BATCH_SIZE = 40
 learning_rate = 0.001
+# 数据集  训练量  是否打乱   num_workers，它表示用于数据加载的子进程数量
 DataLoader_train_data = DataLoader(dataset=train_set,batch_size=BATCH_SIZE,shuffle=True,)
 DataLoader_test_data = DataLoader(dataset=test_set,batch_size=BATCH_SIZE,shuffle=True,)
 DataLoader_pre_data = DataLoader(dataset=pre_set,batch_size=BATCH_SIZE,shuffle=True,)

@@ -59,8 +59,8 @@ def ks(x, y, test_size=2/3):
     spec_test = x[m_complement, :]
     # target_test = y[m_complement]
     return spec_train, spec_test,
-fi =  pd.read_excel("D:\S\start\code\CodeTest\seedtrain\yongyou1540Data\yongyou1540-192h.csv", header=None)
+fi =  pd.read_excel("D:\S\start\code\CodeTest\seedtrain\jiafengyouData\jiafengyou2_weilaohua.xlsx", header=None)
 fi = np.array(fi)
 spec_train, spec_test, = ks(fi,600)
-np.savetxt('yongyou1540-192h-spec_train0h.csv',spec_test,fmt='%.4f',delimiter=',')
-np.savetxt('yongyou1540-192h-spec_val+test0h.csv',spec_train,fmt='%.4f',delimiter=',')
+np.savetxt('jiafengyou2-spec_train0h.csv',spec_test,fmt='%.4f',delimiter=',')
+np.savetxt('jiafengyou2-spec_val+test0h.csv',spec_train,fmt='%.4f',delimiter=',')
